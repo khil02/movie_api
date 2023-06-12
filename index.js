@@ -215,10 +215,14 @@ app.get('/movies/genre/:genreName', (req, res) => {
         //Cannot add ".Genre" to above function, because then its a a property of "undefined." Thats why its call below.
     if (genre){
         
-        // List filter to display all movies of that genre, filter works but doesn't currently get returned
-        //let list = movies
-        //list = list.filter( movie => movie.Genre.Name === genreName)
-        res.status(200).json(genre.Genre);
+        // List filter to display all movies of that genre
+        let list = movies
+        list = list.filter( movie => movie.Genre.Name === genreName)
+        const genreInfo = {
+            Genre: genre.Genre,
+            Movies: list
+        };
+        res.status(200).json(genreInfo);
     } else {
         res.status(400).send("No such Genre")
     }
@@ -231,8 +235,16 @@ app.get('/movies/directors/:directorName', (req, res) => {
     const { directorName } = req.params;
     const director= movies.find( movie => movie.Director.Name === directorName)
 
+    // List filter to display all movies by that director
+    let list = movies
+    list = list.filter( movie => movie.Director.Name === directorName)
+    const directorInfo = {
+        Director: director.Director,
+        Movies: list
+    };
+
     if (director){
-        res.status(200).json(director.Director);
+        res.status(200).json(directorInfo);
     } else {
         res.status(400).send("No Director by that name found.")
     }
