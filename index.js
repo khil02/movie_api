@@ -3,184 +3,193 @@ morgan = require("morgan"),
 fs = require("fs"),
 path = require("path"),
 uuid = require("uuid"),
-bodyParser = require('body-parser');
+bodyParser = require('body-parser'),
+mongoose = require('mongoose'),
+Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect('mongodb://localhost:27017/flixDB', {useNewUrlParser: true, useUnifiedTopology: true});
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {flags: "a"});
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
 
 //temporary hard coded list
-let movies = [
-    {
-        "Title": "Lord of the Rings",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Fantasy",
-            "Description": "Elves, magic and dragons!"        
-        },
-        "Director": {
-            "Name": "Peter Jackson",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-    },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Two Towers",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Fantasy",
-            "Description": "Elves, magic and dragons!"        
-        },
-        "Director": {
-            "Name": "Peter Jackson",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
+// let movies = [
+//     {
+//         "Title": "Lord of the Rings",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Fantasy",
+//             "Description": "Elves, magic and dragons!"        
+//         },
+//         "Director": {
+//             "Name": "Peter Jackson",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//     },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Two Towers",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Fantasy",
+//             "Description": "Elves, magic and dragons!"        
+//         },
+//         "Director": {
+//             "Name": "Peter Jackson",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
         
-    },
-    {
-        "Title": "Return of the King",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Fantasy",
-            "Description": "Elves, magic and dragons!"        
-        },
-        "Director": {
-            "Name": "Peter Jackson",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Star Wars: A New Hope",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Sci-Fi",
-            "Description": "Space!"             
-        },
-        "Director": {
-            "Name": "George Lucas",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Star Wars: Empire Strikes Back",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Sci-Fi",
-            "Description": "Space!"             
-        },
-        "Director": {
-            "Name": "Not George Lucas",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Rogue One: A Star War Story",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Sci-Fi",
-            "Description": "Space!"            
-        },
-        "Director": {
-            "Name": "Not George Lucas",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Star Wars: Revenge of the Sith",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Sci-Fi",
-            "Description": "Space!"            
-        },
-        "Director": {
-            "Name": "Not George Lucas",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Groundhog Day",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Comedy",
-            "Description": "Laughter!"        
-        },
-        "Director": {
-            "Name": "Unknown",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Star Wars: Return of the Jedi",
-        "Description": "To be Added later.",
-        "Genre": { 
-            Name: "Sci-Fi",
-            "Description": "Space!"        
-        },
-        "Director": {
-            "Name": "Not George Lucas",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    },
-    {
-        "Title": "Indiana Jones and the Last Crusade",
-        "Description": "To be Added later.",
-        "Genre": { 
-            "Name": "Action",
-            "Description": "Fighting!"        
-        },
-        "Director": {
-            "Name": "Steven Spielberg",
-            "Bio": "Some guy",
-            "DOB": "01/01/01"
-        },
-        "imgURL": "#",
-        "Featured": true
-    }
-];
+//     },
+//     {
+//         "Title": "Return of the King",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Fantasy",
+//             "Description": "Elves, magic and dragons!"        
+//         },
+//         "Director": {
+//             "Name": "Peter Jackson",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Star Wars: A New Hope",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Sci-Fi",
+//             "Description": "Space!"             
+//         },
+//         "Director": {
+//             "Name": "George Lucas",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Star Wars: Empire Strikes Back",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Sci-Fi",
+//             "Description": "Space!"             
+//         },
+//         "Director": {
+//             "Name": "Not George Lucas",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Rogue One: A Star War Story",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Sci-Fi",
+//             "Description": "Space!"            
+//         },
+//         "Director": {
+//             "Name": "Not George Lucas",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Star Wars: Revenge of the Sith",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Sci-Fi",
+//             "Description": "Space!"            
+//         },
+//         "Director": {
+//             "Name": "Not George Lucas",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Groundhog Day",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Comedy",
+//             "Description": "Laughter!"        
+//         },
+//         "Director": {
+//             "Name": "Unknown",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Star Wars: Return of the Jedi",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             Name: "Sci-Fi",
+//             "Description": "Space!"        
+//         },
+//         "Director": {
+//             "Name": "Not George Lucas",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     },
+//     {
+//         "Title": "Indiana Jones and the Last Crusade",
+//         "Description": "To be Added later.",
+//         "Genre": { 
+//             "Name": "Action",
+//             "Description": "Fighting!"        
+//         },
+//         "Director": {
+//             "Name": "Steven Spielberg",
+//             "Bio": "Some guy",
+//             "DOB": "01/01/01"
+//         },
+//         "imgURL": "#",
+//         "Featured": true
+//     }
+// ];
 
-let users = [
-    {
-        id: 1,
-        Name: "Alex Test",
-        Favorites: [
-             "Groundhog Day",
-             "Lord of the Rings"
-        ]
-    },
-    {
-        id: 2,
-        Name: "Betty Temp",
-        Favorites: [
-             "Two Towers",
-             "Return of the King"
-        ]
-    }
-];
+// let users = [
+//     {
+//         id: 1,
+//         Name: "Alex Test",
+//         Favorites: [
+//              "Groundhog Day",
+//              "Lord of the Rings"
+//         ]
+//     },
+//     {
+//         id: 2,
+//         Name: "Betty Temp",
+//         Favorites: [
+//              "Two Towers",
+//              "Return of the King"
+//         ]
+//     }
+// ];
 
 //Logging code
 app.use(morgan('combined', {stream: accessLogStream}));
@@ -192,11 +201,31 @@ app.get('/', (req, res) => {
 
   //READ list of movies
 app.get('/movies', (req, res) => {
+     Movies.find()
+        .then((movies) => {
+             res.status(201).json(movies);
+         })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+    /*
     res.status(200).json(movies);
+    */
   });
 
   //READ info about specific movies
 app.get('/movies/:title', (req, res) => {
+    Movies.findOne({ Title: req.params.Title })
+    .then((movie) => {
+        res.json(movie);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+
+    /*
     const { title } = req.params;
     const  movie  = movies.find( movie => movie.Title === title);
 
@@ -205,11 +234,21 @@ app.get('/movies/:title', (req, res) => {
     } else {
         res.status(400).send("No movie Title: " + title + " found.")
     }
-    
+    */
   });
 
   //READ info about a specific genre
 app.get('/movies/genre/:genreName', (req, res) => {
+
+    Movies.findOne({ Genre: {name: req.params.GenreName} })
+    .then((movie) => {
+        res.json(movie.Genre);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+    /*
     const { genreName } = req.params;
     const genre = movies.find( movie => movie.Genre.Name === genreName);
         //Cannot add ".Genre" to above function, because then its a a property of "undefined." Thats why its call below.
@@ -226,12 +265,22 @@ app.get('/movies/genre/:genreName', (req, res) => {
     } else {
         res.status(400).send("No such Genre")
     }
-
+    */
   });
 
   //READ info about specific director
 app.get('/movies/directors/:directorName', (req, res) => {
 
+    Movies.findOne({ Director: {name: req.params.directorName} })
+    .then((movie) => {
+        res.json(movie.Director);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+
+    /*
     const { directorName } = req.params;
     const director= movies.find( movie => movie.Director.Name === directorName)
 
@@ -248,92 +297,155 @@ app.get('/movies/directors/:directorName', (req, res) => {
     } else {
         res.status(400).send("No Director by that name found.")
     }
-
+    */
   });
 
   //CREATE allows user to register an account
+  /* Expected in following JSON format
+  {
+    Username: String,
+    Password: String,
+    Email: String,
+    Birthday: Date
+  }
+  */
 app.post('/users/register', (req, res) => {
-    let newUser = req.body;
-
-    if (!newUser.name){
-        const message = "Missing Name in body.";
-        res.status(400).send(message);
-    } else {
-        newUser.id = uuid.v4();
-        users.push(newUser);
-        res.status(201).send(newUser);
-    }
+    Users.findOne({ Username: req.body.Username })
+        .then((user) => {
+            if (user) {
+                return res.status(400).send(req.body.Username + " already exists.");
+            } else { 
+                Users
+                    .create({
+                        Username: req.body.Username,
+                        Password: req.body.Password,
+                        Email: req.body.Email,
+                        Birthday: req.body.Birthday
+                    })
+                    .then((user) => {res.status(201).json(user) })
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).send("Error: " + error);
+                })
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("Error: " + error);
+        });
   });
 
+    //Get all users (probably shouldn't be in final version for security)
+app.get('/users', (req, res) => {
+    Users.find()
+        .then((users) => {
+            res.status(201).json(users);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
+
+    //Get user by username
+app.get('/users/:Username', (req, res) => {
+    Users.findOne({ Username: req.params.Username })
+        .then((user) => {
+            res.json(user);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
     //UPDATE allows user to update profile name
-app.put('/users/:id', (req, res) => {
-    const { id } = req.params;
-    const updatedUser = req.body;
-
-    let user = users.find( user => user.id == id );
-
-    if (user){
-        user.Name = updatedUser.Name;
-        res.status(200).send("Name changed to " + user.Name);
-    } else {
-        res.status(400).send("No user with ID number: " + id + " found.");
-    }
+      /* Expected in following JSON format
+  {
+    Username: String,
+    Password: String,
+    Email: String,
+    Birthday: Date
+  }
+  */
+app.put('/users/:Username', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username}, {$set: 
+        {
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+        }
+    },
+    {new: true}, //This line makes sure that the updated document is returned
+    (err, updatedUser) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        } else {
+            res.json(updatedUser);
+        }
+    });
   });
 
-    //GET shows all movies on favorites list
-app.get('/users/:id/favorites', (req, res) => {
-    const { id } = req.params;
-    let user = users.find( user => user.id == id );
+    //******GET shows all movies on favorites list NOT UPDATED*******
+// app.get('/users/:id/favorites', (req, res) => {
+//     const { id } = req.params;
+//     let user = users.find( user => user.id == id );
 
-    if (user){
-        res.status(200).json(user.Favorites);
-    } else {
-        res.status(404).send("No user with ID number: " + id + " found.");
-    }
-  });
+//     if (user){
+//         res.status(200).json(user.Favorites);
+//     } else {
+//         res.status(404).send("No user with ID number: " + id + " found.");
+//     }
+//   });
 
     //CREATE allows user to add movies from list
-app.post('/users/:id/favorites/:movieTitle', (req, res) => {
-    const { id, movieTitle } = req.params;
-    let user = users.find( user => user.id == id );
-
-    if (user){
-        user.Favorites.push(movieTitle);
-        res.status(200).send(`${movieTitle} to Favorites list.`);
-    } else {
-        res.status(404).send("No user with ID number: " + id + " found.");
-    }
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, { 
+         $addToSet: { FavoriteMovies: req.params.MovieID }
+    }, 
+    {new: true}, //This line makes sure that the updated document is returned
+    (err, updatedUser) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        } else {
+            res.json(updatedUser);
+        }
+    });
   });
 
       //delete allows user to remove movies from list
-app.delete('/users/:id/favorites/:movieTitle', (req, res) => {
-    const { id, movieTitle } = req.params;
-    let user = users.find( user => user.id == id );
-    
-    if (user){
-
-        user.Favorites = user.Favorites.filter(Title =>  Title !== movieTitle);
-        res.status(200).send(movieTitle + " removed from favorites")
-
-    } else {
-        res.status(400).send("No user with ID number: " + id + " found.");
-    }
+app.delete('/users/:Username/favorites/:movieTitle', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username}, { 
+        $pull: { FavoriteMovies: req.params.MovieID}
+   },
+   {new: true}, //This line makes sure that the updated document is returned
+   (err, updatedUser) => {
+       if(err) {
+           console.error(err);
+           res.status(500).send('Error: ' + err);
+       } else {
+           res.json(updatedUser);
+       }
+   });
   });
 
     //Delete allows user to delete profile
 app.delete('/users/:id', (req, res) => {
-    //res.send("Successful DELETE request for user to delete an account");
-    const { id} = req.params;
-    let user = users.find( user => user.id == id );
-
-    if (user){
-       users = users.filter(user => user.id != id);
-       res. status(201).send("User ID #" + id + " deleted.");
-    } else {
-        res.status(404).send("No user with ID number: " + id + " found.");
-    }
-  });
-  
+    Users.findOneAndRemove({ Username: req.params.Username})
+        .then((user) => {
+            if(!user) {
+                res.status(400).send(req.params.Username + " was not found.");
+            } else {
+                res.status(200).send(req.params.Username + " was deleted.");
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send("Error: " + err);
+        });
+   });
 
 app.use(express.static("public"));
 
