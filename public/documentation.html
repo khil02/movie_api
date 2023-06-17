@@ -74,49 +74,49 @@
 
                     <tr>
                         <td>Allows user to register an account</td>
-                        <td>/user/register</td>
+                        <td>/users/register</td>
                         <td>POST</td>
                         <td>none</td>
-                        <td>JSON object of the new user, structed as follows: {name: " ", favorites: [" ", " "]}</td>
+                        <td>JSON object of the new user, structed as follows: {"Username": " ", "Password": " ", "Email": " ", "Birthday": "date" (example 01/01/1990) }</td>
                         <td>JSON object of the new user, with generated ID included</td>
                    </tr>
                      <tr>
                         <td>Allows user to update profile name</td>
-                        <td>/user/:id</td>
+                        <td>/users/:Username</td>
                         <td>PUT</td>
-                        <td>:id</td>
+                        <td>:Username</td>
                        <td>JSON object of the user's new name, structed as follows: {name: " "}</td>
                         <td>JSON object of the stating the name as been changed </td>
                     </tr>
-                     <tr>
+                     <!-- <tr>
                         <td>Shows all movies on favorites list</td>
-                        <td>/user/:id/favorites</td>
+                        <td>/user/:Username/favorites</td>
                         <td>GET</td>
                         <td>:id</td>
                         <td>None</td>
                         <td>JSON object of user's favorites movies list</td>
-                    </tr>
+                    </tr> -->
                      <tr>
                         <td>Allows user to add movie to their favorites list</td>
-                        <td>/user/:id/favorites/:movieTitle</td>
+                        <td>/users/:Username/favorites/:MovieID</td>
                         <td>PUT</td>
-                        <td>:id, :movieTitle</td>
+                        <td>:Username, :MovieID</td>
                         <td>None</td>
                         <td>JSON object stating movie has been added to favorites list</td>
                     </tr>
                      <tr>
                         <td>Allows user to remove movie to their favorites list</td>
-                        <td>/user/:id/favorites/:movieTitle</td>
+                        <td>/users/:Username/favorites/:MovieID</td>
                         <td>DELETE</td>
-                        <td>:id, :movieTitle</td>
+                        <td>:Username, :MovieID</td>
                         <td>None</td>
                         <td>JSON object stating movie has been removed from favorites list</td>
                     </tr>
                      <tr>
                         <td>Allows user to delete their account</td>
-                        <td>/user/:id</td>
+                        <td>/users/:UserID</td>
                         <td>DELETE</td>
-                        <td>:id</td>
+                        <td>:UserID</td>
                         <td>None</td>
                         <td>JSON object stating user has been deleted</td>
                     </tr>                
