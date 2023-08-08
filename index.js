@@ -5,7 +5,10 @@ path = require("path"),
 uuid = require("uuid"),
 bodyParser = require('body-parser'),
 mongoose = require('mongoose'),
-Models = require('./models.js');
+Models = require('./models.js'),
+cors = require('cors');
+
+const { check, validationResult } = require('express-validator');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -17,6 +20,21 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 
+app.use(cors());
+/* 
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if(!origin) return callback(null, true);
+        if(allowedOrigins.indexOf(origin) === -1){// If a specific origin isn't found on a list of allowed origins
+            let message = 'The CORS policy for this application doesn't allo access from origin ' + origin;
+            return callback(new Error(message), false);
+        }
+        return callback(null, true);
+    }
+}));
+*/
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
@@ -128,8 +146,22 @@ app.get('/movies/directors/:directorName', passport.authenticate('jwt', { sessio
     Birthday: Date
   }
   */
-app.post('/users/register', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOne({ Username: req.body.Username })
+app.post('/users/register',[
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear').isEmail()
+], /*passport.authenticate('jwt', { session: false }),*/ async (req, res) => {
+
+    // check the validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()){
+        return res.status(422).json({ errors: errors.array()});
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    await Users.findOne({ Username: req.body.Username })
         .then((user) => {
             if (user) {
                 return res.status(400).send(req.body.Username + " already exists.");
@@ -137,7 +169,7 @@ app.post('/users/register', passport.authenticate('jwt', { session: false }), (r
                 Users
                     .create({
                         Username: req.body.Username,
-                        Password: req.body.Password,
+                        Password: hashedPassword,
                         Email: req.body.Email,
                         Birthday: req.body.Birthday
                     })
@@ -187,7 +219,19 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
     Birthday: Date
   }
   */
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.put('/users/:Username', [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear').isEmail()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()){
+        return res.status(422).json({ errors: errors.array()});
+    }
+
     Users.findOneAndUpdate({ Username: req.params.Username}, { $set: 
         {
             Username: req.body.Username,
@@ -270,8 +314,9 @@ app.use((err, req, res, next) => {
     res.status(500).send("Something broke!");
   });
 
-  app.listen(8080, () => {
-    console.log('Your app is listening on port 8080.');
+  const port = process.env.PORT || 8080
+  app.listen(port, '0.0.0.0', () => {
+    console.log('Your app is listening on port 8080.' + port);
   });
 
   
