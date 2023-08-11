@@ -13,7 +13,11 @@ const { check, validationResult } = require('express-validator');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://127.0.0.1:27017/flixDB', {useNewUrlParser: true, useUnifiedTopology: true});
+// Local host
+//mongoose.connect('mongodb://127.0.0.1:27017/flixDB', {useNewUrlParser: true, useUnifiedTopology: true});
+
+// Web Host
+mongoose.connect(process.env.CONNECTION_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {flags: "a"});
 const app = express();
@@ -161,7 +165,7 @@ app.post('/users/register',[
     }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
-    await Users.findOne({ Username: req.body.Username })
+    Users.findOne({ Username: req.body.Username })
         .then((user) => {
             if (user) {
                 return res.status(400).send(req.body.Username + " already exists.");
@@ -231,11 +235,11 @@ app.put('/users/:Username', [
     if (!errors.isEmpty()){
         return res.status(422).json({ errors: errors.array()});
     }
-
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOneAndUpdate({ Username: req.params.Username}, { $set: 
         {
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
         }
