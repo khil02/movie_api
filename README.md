@@ -4,9 +4,9 @@
     You will be able to search and keep a list of movies, as well as register as a user to currate your own list and deregister.
            
 
-             | What it does | URL | HTTP Method | Parameters for Query | REQUEST body data format | RESPONE body data format | JWT Bearer token required |
-             | ------------ | ---- |----------- | -------------------- |------------------------- | ------------------------ | --------------------- |
-             | Shows list of all movies in database | /movies | GET | None | None | JSON object of full movie list | Yes |
+| What it does | URL | HTTP Method | Parameters for Query | REQUEST body data format | RESPONE body data format | JWT Bearer token required |
+| ------------ | ---- |----------- | -------------------- |------------------------- | ------------------------ | --------------------- |
+| Shows list of all movies in database | /movies | GET | None | None | JSON object of full movie list | Yes |
              | Shows the details for a specific movie | /movies/:title | GET | :title |None | JSON object of specific movie | Yes |
              | Shows a description of that specific genre | /movies/genre/:genreName | GET | :genreName | None | JSON object of genre description | Yes |
              | Shows info about specific director | /movies/directors/:directorName | GET| :directorName | None | JSON object with information about that director | Yes |
