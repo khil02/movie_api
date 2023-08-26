@@ -91,6 +91,30 @@ app.get(
   }
 );
 
+//   Added to update movie information
+app.put(
+  "/movies/update/:title",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Movies.findOneAndUpdate(
+      { Title: req.params.Title },
+      {
+        $set: {
+          ImagePath: req.body.ImagePath,
+        },
+      },
+      { new: true }
+    )
+      .then((movie) => {
+        res.json(movie);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
+
 //READ info about a specific genre
 app.get(
   "/movies/genre/:genreName",
