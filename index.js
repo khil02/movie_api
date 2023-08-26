@@ -97,7 +97,7 @@ app.put(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Movies.findOneAndUpdate(
-      { Title: req.params.Title },
+      { Title: req.params.title },
       {
         $set: {
           ImagePath: req.body.ImagePath,
