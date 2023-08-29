@@ -61,7 +61,8 @@ app.get("/", (req, res) => {
 //READ list of movies
 app.get(
   "/movies",
-  /* passport.authenticate('jwt', { session: false }),  */ (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     Movies.find()
       .then((movies) => {
         res.status(201).json(movies);
@@ -79,7 +80,8 @@ app.get(
 //READ info about specific movies
 app.get(
   "/movies/:title",
-  /* passport.authenticate('jwt', { session: false }), */ (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     Movies.findOne({ Title: req.params.title })
       .then((movie) => {
         res.json(movie);
@@ -118,7 +120,8 @@ app.put(
 //READ info about a specific genre
 app.get(
   "/movies/genre/:genreName",
-  /* passport.authenticate('jwt', { session: false }), */ (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     Movies.findOne({ "Genre.Name": req.params.genreName })
       .then((movie) => {
         res.json(movie.Genre);
@@ -151,7 +154,8 @@ app.get(
 //READ info about specific director
 app.get(
   "/movies/directors/:directorName",
-  /* passport.authenticate('jwt', { session: false }), */ (req, res) => {
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     Movies.findOne({ "Director.Name": req.params.directorName })
       .then((movie) => {
         res.json(movie.Director);
