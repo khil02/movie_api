@@ -29,21 +29,31 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors());
-/* 
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+//app.use(cors());
 
-app.use(cors({
+let allowedOrigins = [
+  "http://localhost:8080",
+  "http://localhost:1234",
+  "https://myflix-sanchez.netlify.app",
+  "http://testsite.com",
+];
+
+app.use(
+  cors({
     origin: (origin, callback) => {
-        if(!origin) return callback(null, true);
-        if(allowedOrigins.indexOf(origin) === -1){// If a specific origin isn't found on a list of allowed origins
-            let message = 'The CORS policy for this application doesn't allo access from origin ' + origin;
-            return callback(new Error(message), false);
-        }
-        return callback(null, true);
-    }
-}));
-*/
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        // If a specific origin isn't found on a list of allowed origins
+        let message =
+          "The CORS policy for this application doesn't allo access from origin " +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
+
 let auth = require("./auth")(app);
 const passport = require("passport");
 require("./passport");
