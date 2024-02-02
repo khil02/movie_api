@@ -73,6 +73,7 @@ app.get("/", (req, res) => {
 
 /**
  * Get list of all movies
+ * @name getAllMovies
  * @function
  * @param {Object} req - express request object
  * @param {object} res - express response object
@@ -118,6 +119,7 @@ app.get(
 
 /**
  * Get a specific movie
+ * @name getMovie
  * @param {Object} req - express request object
  * @param {String} req.params.title - Title of movie being requested
  * @param {object} res - express response object
@@ -160,6 +162,7 @@ app.get(
 
 /**
  * Update Imagepath for a specific movie
+ * @name updateMovie
  * @param {Object} req - express request object
  * @param {String} req.params.title - Title of movie being updated
  * @param {object} res - express response object
@@ -211,6 +214,7 @@ app.put(
 
 /**
  * Get information about specific genre
+ * @name getGenre
  * @param {Object} req - express request object
  * @param {String} req.params.genreName - name of genre being requested
  * @param {object} res - express response object
@@ -262,6 +266,7 @@ app.get(
 
 /**
  * Get information about a specific director
+ * @name getDirector
  * @param {Object} req - express request object
  * @param {String} req.params.directorName - name of director being requested
  * @param {object} res - express response object
@@ -315,6 +320,22 @@ app.get(
 
 //USERS
 
+/**
+ * Allows user to login
+ * FUNCATION LOCATED IN auth.js
+ *
+ * @name loginUser
+ * @function
+ * @param {Object} request - Express request object
+ * @param {Object} response - Express response object
+ * @returns {Object} - JSON containing user details upon successful login
+ * @throws {Object} - Error object if there is an issue with logging in
+ * @example
+ * // Request: POST /login
+ * // Body: {Username: "testUser", Password:(hashed)}
+ *  Response: {_id: "123", Username: "testUser", Password:(hashed), Email: "test@email.com", ... }
+ */
+
 /* Expected in following JSON format
   {
     Username: String,
@@ -326,6 +347,7 @@ app.get(
 /**
  * Allows new users to register
  *
+ * @name registerUser
  * @function
  * @param {Object} request - Express request object
  * @param {Object} response - Express response object
@@ -386,6 +408,7 @@ app.post(
 /**
  * Get all users (probably shouldn't be in final version for security)
  *
+ * @name getAllUsers
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -413,6 +436,7 @@ app.get(
 /**
  * Get user by username
  *
+ * @name getUser
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -448,6 +472,7 @@ app.get(
 /**
  * Update user by username
  *
+ * @name updateUser
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -502,6 +527,7 @@ app.put(
 /**
  * Add movie to user's FavoriteMovie list
  *
+ * @name addFavoriteMovie
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -536,6 +562,7 @@ app.post(
 /**
  * Delete movie to user's FavoriteMovie list
  *
+ * @name deleteFavoriteMovie
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -568,8 +595,9 @@ app.delete(
 );
 
 /**
- * Delete movie to user's FavoriteMovie list
+ * Delete user
  *
+ * @name deleteUser
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -603,6 +631,7 @@ app.use(express.static("public"));
 /**
  * Error handling function
  *
+ * @name error
  * @function
  * @param {Object} Err - Error object
  * @param {Object} req - express request object

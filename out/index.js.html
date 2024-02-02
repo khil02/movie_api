@@ -36,16 +36,6 @@
   Models = require("./models.js"),
   cors = require("cors");
 
-/**
- * Returns the sum of a and b
- * @param {number} a
- * @param {number} b
- * @returns {number}
- */
-function sum(a, b) {
-  return a + b;
-}
-
 const { check, validationResult } = require("express-validator");
 
 const Movies = Models.Movie;
@@ -111,6 +101,8 @@ app.get("/", (req, res) => {
 
 /**
  * Get list of all movies
+ * @name getAllMovies
+ * @function
  * @param {Object} req - express request object
  * @param {object} res - express response object
  * @returns {object} - list of all movies
@@ -155,6 +147,7 @@ app.get(
 
 /**
  * Get a specific movie
+ * @name getMovie
  * @param {Object} req - express request object
  * @param {String} req.params.title - Title of movie being requested
  * @param {object} res - express response object
@@ -197,6 +190,7 @@ app.get(
 
 /**
  * Update Imagepath for a specific movie
+ * @name updateMovie
  * @param {Object} req - express request object
  * @param {String} req.params.title - Title of movie being updated
  * @param {object} res - express response object
@@ -248,6 +242,7 @@ app.put(
 
 /**
  * Get information about specific genre
+ * @name getGenre
  * @param {Object} req - express request object
  * @param {String} req.params.genreName - name of genre being requested
  * @param {object} res - express response object
@@ -299,6 +294,7 @@ app.get(
 
 /**
  * Get information about a specific director
+ * @name getDirector
  * @param {Object} req - express request object
  * @param {String} req.params.directorName - name of director being requested
  * @param {object} res - express response object
@@ -352,6 +348,22 @@ app.get(
 
 //USERS
 
+/**
+ * Allows user to login
+ * FUNCATION LOCATED IN auth.js
+ *
+ * @name loginUser
+ * @function
+ * @param {Object} request - Express request object
+ * @param {Object} response - Express response object
+ * @returns {Object} - JSON containing user details upon successful login
+ * @throws {Object} - Error object if there is an issue with logging in
+ * @example
+ * // Request: POST /login
+ * // Body: {Username: "testUser", Password:(hashed)}
+ *  Response: {_id: "123", Username: "testUser", Password:(hashed), Email: "test@email.com", ... }
+ */
+
 /* Expected in following JSON format
   {
     Username: String,
@@ -363,6 +375,7 @@ app.get(
 /**
  * Allows new users to register
  *
+ * @name registerUser
  * @function
  * @param {Object} request - Express request object
  * @param {Object} response - Express response object
@@ -423,6 +436,7 @@ app.post(
 /**
  * Get all users (probably shouldn't be in final version for security)
  *
+ * @name getAllUsers
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -450,6 +464,7 @@ app.get(
 /**
  * Get user by username
  *
+ * @name getUser
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -485,6 +500,7 @@ app.get(
 /**
  * Update user by username
  *
+ * @name updateUser
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -539,6 +555,7 @@ app.put(
 /**
  * Add movie to user's FavoriteMovie list
  *
+ * @name addFavoriteMovie
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -573,6 +590,7 @@ app.post(
 /**
  * Delete movie to user's FavoriteMovie list
  *
+ * @name deleteFavoriteMovie
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -605,8 +623,9 @@ app.delete(
 );
 
 /**
- * Delete movie to user's FavoriteMovie list
+ * Delete user
  *
+ * @name deleteUser
  * @function
  * @param {Object} request - express request object
  * @param {Object} response - express response object
@@ -640,6 +659,7 @@ app.use(express.static("public"));
 /**
  * Error handling function
  *
+ * @name error
  * @function
  * @param {Object} Err - Error object
  * @param {Object} req - express request object
@@ -666,13 +686,13 @@ app.listen(port, "0.0.0.0", () => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#sum">sum</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addFavoriteMovie">addFavoriteMovie</a></li><li><a href="global.html#deleteFavoriteMovie">deleteFavoriteMovie</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#error">error</a></li><li><a href="global.html#getAllMovies">getAllMovies</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getDirector">getDirector</a></li><li><a href="global.html#getGenre">getGenre</a></li><li><a href="global.html#getMovie">getMovie</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#updateMovie">updateMovie</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Sat Jan 27 2024 13:25:17 GMT-0700 (Mountain Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Feb 01 2024 19:17:39 GMT-0700 (Mountain Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
