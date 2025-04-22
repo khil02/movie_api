@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(cors());
 
 let allowedOrigins = [
-  "http://exercise17-website-bucket.s3-website-us-east-1.amazonaws.com/",
+  "http://exercise17-website-bucket.s3-website-us-east-1.amazonaws.com",
   "http://localhost:8080",
   "http://localhost:1234",
   "https://myflix-sanchez.netlify.app",
