@@ -32,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(cors());
 
 let allowedOrigins = [
+  "http://exercise17-website-bucket.s3-website-us-east-1.amazonaws.com/",
   "http://localhost:8080",
   "http://localhost:1234",
   "https://myflix-sanchez.netlify.app",
@@ -48,7 +49,7 @@ app.use(
       if (allowedOrigins.indexOf(origin) === -1) {
         // If a specific origin isn't found on a list of allowed origins
         let message =
-          "The CORS policy for this application doesn't allo access from origin " +
+          "The CORS policy for this application doesn't allow access from origin " +
           origin;
         return callback(new Error(message), false);
       }
